@@ -1,0 +1,15 @@
+<pack>
+  <task id="1" name="Task 1 - Build">
+    <!-- TODO Build -->
+  </task>
+  <task id="2" name="Task 2 - Copy">
+    <copy from="path/to/folder/or/file/" to="target/directiry"/>
+    <copy from="other/path/" to="target/directiry"/>
+  </task>
+  <task id="3" name="Task 3 - Zip">
+    <zip from="target/directiry/" to="target/target.zip"/>
+  </task>
+  <task id="4" name="Task 4 - Copy Zipfile">
+    <copy from="target/target.zip" to="deploymentpackage/"/>
+  </task>
+</pack>
