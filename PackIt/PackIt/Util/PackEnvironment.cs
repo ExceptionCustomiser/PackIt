@@ -21,7 +21,11 @@ namespace PackIt.Util
         }
 
         /// <summary>Private constructir</summary>
-        private PackEnvironment() { }
+        private PackEnvironment()
+        {
+            // Setting default XML file
+            PackEnvironment.Instance["XML"] = "pack.xml";
+        }
 
         private Dictionary<string, string> parameter = new Dictionary<string, string>();
 
@@ -46,8 +50,23 @@ namespace PackIt.Util
         /// <param name="args">The arguments</param>
         public void InitArguments(string[] args)
         {
-            // Setting default XML file
-            PackEnvironment.Instance["XML"] = "pack.xml";
+            // Exit on empty
+            if (args.Length == 0)
+                return;
+
+            int i = 0;
+            // When Arg 0 is no command, use it as xmlfile
+            if (args[i][i] != '/')
+                parameter["XML"] = args[i++];
+            // Read Arguments 
+            for (; i < args.Length; i++)
+            {
+                string key = args[i];
+                string value = true.ToString();
+                if (i + 1 < args.Length && args[i][i] == '/')
+                    value = args[++i];
+                parameter.Add(key, value);
+            }
         }
     }
 }
