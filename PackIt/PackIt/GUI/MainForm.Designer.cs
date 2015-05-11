@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparatorFile = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.workingTabControler = new System.Windows.Forms.TabControl();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
@@ -40,7 +42,6 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.stripVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.stripStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripSeparatorFile = new System.Windows.Forms.ToolStripSeparator();
             this.treeProject = new System.Windows.Forms.TreeView();
             this.menu.SuspendLayout();
             this.toolStrip.SuspendLayout();
@@ -93,6 +94,11 @@
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // toolStripSeparatorFile
+            // 
+            this.toolStripSeparatorFile.Name = "toolStripSeparatorFile";
+            this.toolStripSeparatorFile.Size = new System.Drawing.Size(149, 6);
             // 
             // exitToolStripMenuItem
             // 
@@ -157,11 +163,6 @@
             this.stripStatus.Size = new System.Drawing.Size(39, 19);
             this.stripStatus.Text = "Ready";
             // 
-            // toolStripSeparatorFile
-            // 
-            this.toolStripSeparatorFile.Name = "toolStripSeparatorFile";
-            this.toolStripSeparatorFile.Size = new System.Drawing.Size(149, 6);
-            // 
             // treeProject
             // 
             this.treeProject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -181,6 +182,7 @@
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.workingTabControler);
             this.Controls.Add(this.menu);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menu;
             this.Name = "MainForm";
             this.Text = "MainForm";

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace PackIt.GUI
 {
@@ -63,6 +64,11 @@ namespace PackIt.GUI
             e.Cancel = !CheckExitOnDirty();
         }
 
+        private void Tree_Click(object sender, EventArgs e)
+        {
+
+        }
+
         #endregion
 
         #region Methods
@@ -89,6 +95,11 @@ namespace PackIt.GUI
         private void New()
         {
             SomethignOpen = true;
+        }
+
+        private void FillProjectTree(XmlDocument document)
+        {
+            // TODO Fill Tree
         }
 
         private bool CheckExitOnDirty()
