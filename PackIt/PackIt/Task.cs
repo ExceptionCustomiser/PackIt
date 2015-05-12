@@ -15,8 +15,13 @@ namespace PackIt
         public int TaskID { get; set; }
 
         public Task(string taskName)
+            : this()
         {
             TaskName = taskName;
+        }
+
+        public Task()
+        {
             Actions = new List<Action>();
         }
 
@@ -47,6 +52,8 @@ namespace PackIt
             TaskID = Convert.ToInt32(node.Attributes["id"].Value);
             foreach (XmlNode child in node.ChildNodes)
             {
+                if (child.NodeType != XmlNodeType.Element)
+                    continue;
                 Action act = Action.GetTaskByString(child.Name);
                 act.FillFromXmlNode(child);
                 Actions.Add(act);

@@ -31,12 +31,15 @@ namespace PackIt.GUI
             }
         }
 
+        private Project _CurrentProject;
+
         public MainForm()
         {
             InitializeComponent();
             FillInitialInfos();
             SomethignOpen = false;
         }
+
         #region EventHandling
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -54,11 +57,13 @@ namespace PackIt.GUI
             Save();
         }
 
+        /// <summary>Calls <code>Application.Exit</code></summary>
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
+        /// <summary>Cancles the event when <code>CheckExitOnDirty</code> returns <code>false</code>.</summary>
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = !CheckExitOnDirty();
@@ -66,7 +71,7 @@ namespace PackIt.GUI
 
         private void Tree_Click(object sender, EventArgs e)
         {
-
+            OpenNewTab(null);
         }
 
         #endregion
@@ -87,19 +92,45 @@ namespace PackIt.GUI
         /// <summary>Opens an existing project.</summary>
         private void Open()
         {
-
+            FillProjectTree();
             SomethignOpen = true;
         }
 
         /// <summary>Creates a new project.</summary>
         private void New()
         {
+            FillProjectTree();
             SomethignOpen = true;
         }
 
-        private void FillProjectTree(XmlDocument document)
+        private void FillProjectTree()
         {
-            // TODO Fill Tree
+            treeProject.Nodes.Clear();
+            // Für jeden Task
+            foreach (Task task in _CurrentProject.Tasks)
+            {
+                TreeNode tNode = new TreeNode(task.TaskName);
+                tNode.Tag = task;
+                foreach(Action act in task.Actions)
+                {
+                    TreeNode aNode = new TreeNode(act.TagName);
+                    // TODO besserer Name?
+                    tNode.Nodes.Add(aNode);
+                    aNode.Tag = act;
+                }
+                treeProject.Nodes.Add(tNode);
+            }
+        }
+
+        /// <summary>Opens a new tab.</summary>
+        /// <param name="toOpen"></param>
+        private void OpenNewTab(Task toOpen)
+        {
+            TabPage tp = new TabPage();
+            tp.Text = toOpen.TaskName;
+            // TODO Load specific Task controls
+            this.workingTabControler.TabPages.Add(tp);
+            workingTabControler.SelectedTab = tp;
         }
 
         private bool CheckExitOnDirty()
@@ -123,7 +154,6 @@ namespace PackIt.GUI
         private void SetControlsActive(bool status)
         {
             this.saveToolStripMenuItem.Enabled = status;
-            this.btnSave.Enabled = status;
             this.treeProject.Enabled = status;
             this.workingTabControler.Enabled = status;
             if (!status)
