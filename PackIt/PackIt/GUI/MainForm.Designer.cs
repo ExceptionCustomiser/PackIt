@@ -111,10 +111,10 @@
             this.workingTabControler.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.workingTabControler.Location = new System.Drawing.Point(150, 27);
+            this.workingTabControler.Location = new System.Drawing.Point(179, 27);
             this.workingTabControler.Name = "workingTabControler";
             this.workingTabControler.SelectedIndex = 0;
-            this.workingTabControler.Size = new System.Drawing.Size(554, 388);
+            this.workingTabControler.Size = new System.Drawing.Size(525, 388);
             this.workingTabControler.TabIndex = 3;
             // 
             // statusStrip
@@ -147,8 +147,10 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.treeProject.Location = new System.Drawing.Point(0, 27);
             this.treeProject.Name = "treeProject";
-            this.treeProject.Size = new System.Drawing.Size(144, 388);
+            this.treeProject.ShowPlusMinus = false;
+            this.treeProject.Size = new System.Drawing.Size(173, 388);
             this.treeProject.TabIndex = 6;
+            this.treeProject.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeProject_BeforeCollapse);
             this.treeProject.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeProject_NodeMouseDoubleClick);
             // 
             // MainForm

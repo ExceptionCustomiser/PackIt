@@ -49,12 +49,46 @@
     <Compile Include="Actions\CopyAction.cs" />
     <Compile Include="Actions\DeleteAction.cs" />
     <Compile Include="Actions\ZipAction.cs" />
+    <Compile Include="GUI\IDirty.cs" />
+    <Compile Include="GUI\UserControls\CopyControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\UserControls\CopyControl.Designer.cs">
+      <DependentUpon>CopyControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\UserControls\DeleteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\UserControls\DeleteControl.Designer.cs">
+      <DependentUpon>DeleteControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\UserControls\ProjectControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\UserControls\ProjectControl.Designer.cs">
+      <DependentUpon>ProjectControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\UserControls\TabPageUtil.cs" />
+    <Compile Include="GUI\UserControls\TaskControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\UserControls\TaskControl.Designer.cs">
+      <DependentUpon>TaskControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\UserControls\ZipControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\UserControls\ZipControl.Designer.cs">
+      <DependentUpon>ZipControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IPackItem.cs" />
+    <Compile Include="ISavable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,11 +99,13 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Task.cs" />
-    <Compile Include="Util\PackEnvironment.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\UserControls\ProjectControl.resx">
+      <DependentUpon>ProjectControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

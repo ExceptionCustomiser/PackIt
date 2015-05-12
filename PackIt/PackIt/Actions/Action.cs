@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace PackIt
 {
     internal abstract class Action
+        : IPackItem
     {
 
         private static Dictionary<string, Type> _Actions = new Dictionary<string, Type>();
@@ -17,7 +19,8 @@ namespace PackIt
         protected Action(string tagName)
         {
             TagName = tagName;
-            _Actions.Add(tagName, this.GetType());
+            if (!_Actions.ContainsKey(tagName))
+                _Actions.Add(tagName, this.GetType());
         }
 
         /// <summary>Collects the data of this tasks and returns a XmlNode representing this task.</summary>
@@ -32,5 +35,9 @@ namespace PackIt
         {
             return (Action)Activator.CreateInstance(_Actions[taskName]);
         }
+
+        public abstract void Save();
+
+        public abstract Control GetConfigControl();
     }
 }

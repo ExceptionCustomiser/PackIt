@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PackIt.GUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,12 +8,15 @@ using System.Xml;
 namespace PackIt
 {
     internal class Task
+        : IPackItem
     {
         public List<Action> Actions { get; private set; }
 
         public string TaskName { get; set; }
 
         public int TaskID { get; set; }
+
+        private TaskControl control;
 
         public Task(string taskName)
             : this()
@@ -26,7 +30,7 @@ namespace PackIt
         }
 
         /// <summary>Collects the data of this tasks and fills a XmlNode representing this task.</summary>
-        public void GetXml(XmlNode itself)
+        public void FillXml(XmlNode itself)
         {
             XmlAttribute taskName = itself.OwnerDocument.CreateAttribute("name");
             taskName.Value = TaskName;
@@ -60,5 +64,20 @@ namespace PackIt
             }
         }
 
+        public void Save()
+        {
+            if (control != null)
+                control.Save();
+            foreach (Action act in Actions)
+                act.Save();
+        }
+
+
+        public System.Windows.Forms.Control GetConfigControl()
+        {
+            if (control == null)
+                control = new TaskControl(this);
+            return control;
+        }
     }
 }

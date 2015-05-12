@@ -1,5 +1,5 @@
-﻿using PackIt.GUI;
-using PackIt.Util;
+﻿using PackIt.Actions;
+using PackIt.GUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +18,18 @@ namespace PackIt
         [STAThread]
         static void Main()
         {
+            InitialiseActions();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
+        }
+
+
+        private static void InitialiseActions()
+        {
+            new CopyAction();
+            new DeleteAction();
+            new ZipAction();
         }
     }
 }
