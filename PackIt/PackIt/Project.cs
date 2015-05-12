@@ -10,6 +10,8 @@ namespace PackIt
     {
         public List<Task> Tasks { get; private set; }
 
+        public XmlDocument Document { get; private set; }
+
         public Project()
         {
             Tasks = new List<Task>();
@@ -17,6 +19,7 @@ namespace PackIt
 
         public void InitialiseProject(XmlDocument doc)
         {
+            Document = doc;
             // For each task
             foreach (XmlNode node in doc.ChildNodes)
             {

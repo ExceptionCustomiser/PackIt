@@ -149,6 +149,7 @@
             this.treeProject.Name = "treeProject";
             this.treeProject.Size = new System.Drawing.Size(144, 388);
             this.treeProject.TabIndex = 6;
+            this.treeProject.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeProject_NodeMouseDoubleClick);
             // 
             // MainForm
             // 

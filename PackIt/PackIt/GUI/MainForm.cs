@@ -69,9 +69,12 @@ namespace PackIt.GUI
             e.Cancel = !CheckExitOnDirty();
         }
 
-        private void Tree_Click(object sender, EventArgs e)
+        private void treeProject_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            OpenNewTab(null);
+            if (e.Node.Tag is Task)
+                OpenNewTask(e.Node.Tag as Task);
+            else if (e.Node.Tag is Action)
+                OpenNewAction(e.Node.Parent.Tag as Task, e.Node.Tag as Action);
         }
 
         #endregion
@@ -92,6 +95,25 @@ namespace PackIt.GUI
         /// <summary>Opens an existing project.</summary>
         private void Open()
         {
+            OpenFileDialog ofd = new OpenFileDialog();
+            var result = ofd.ShowDialog();
+            switch (result)
+            {
+                case System.Windows.Forms.DialogResult.OK:
+
+                    break;
+                case System.Windows.Forms.DialogResult.Cancel:
+                    return;
+            }
+            try
+            {
+                XmlDocument doc = new XmlDocument();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unable to load file: " + ex.ToString());
+                return;
+            }
             FillProjectTree();
             SomethignOpen = true;
         }
@@ -99,6 +121,17 @@ namespace PackIt.GUI
         /// <summary>Creates a new project.</summary>
         private void New()
         {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            var result = fbd.ShowDialog();
+            switch (result)
+            {
+                case System.Windows.Forms.DialogResult.OK:
+
+                    break;
+                case System.Windows.Forms.DialogResult.Cancel:
+                    return;
+            }
+            fbd.SelectedPath;
             FillProjectTree();
             SomethignOpen = true;
         }
@@ -111,7 +144,7 @@ namespace PackIt.GUI
             {
                 TreeNode tNode = new TreeNode(task.TaskName);
                 tNode.Tag = task;
-                foreach(Action act in task.Actions)
+                foreach (Action act in task.Actions)
                 {
                     TreeNode aNode = new TreeNode(act.TagName);
                     // TODO besserer Name?
@@ -124,11 +157,20 @@ namespace PackIt.GUI
 
         /// <summary>Opens a new tab.</summary>
         /// <param name="toOpen"></param>
-        private void OpenNewTab(Task toOpen)
+        private void OpenNewTask(Task toOpen)
         {
             TabPage tp = new TabPage();
             tp.Text = toOpen.TaskName;
-            // TODO Load specific Task controls
+            // TODO Load specific controls
+            this.workingTabControler.TabPages.Add(tp);
+            workingTabControler.SelectedTab = tp;
+        }
+
+        private void OpenNewAction(Task parent, Action toOpen)
+        {
+            TabPage tp = new TabPage();
+            tp.Text = parent.TaskName + " - " + toOpen.TagName;
+            // TODO Load specific controls
             this.workingTabControler.TabPages.Add(tp);
             workingTabControler.SelectedTab = tp;
         }
