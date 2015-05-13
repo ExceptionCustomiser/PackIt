@@ -53,13 +53,12 @@ namespace PackIt
 
         private void UpdateDocument()
         {
-            Document.ChildNodes[0].RemoveAll();
+            Document.FirstChild.RemoveAll();
             foreach (Task task in Tasks)
             {
                 XmlNode tNode = Document.CreateElement("task");
-                Document.ChildNodes[0].AppendChild(tNode);
+                Document.FirstChild.AppendChild(tNode);
                 task.FillXml(tNode);
-
             }
         }
 
