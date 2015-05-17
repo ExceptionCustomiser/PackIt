@@ -50,7 +50,8 @@ namespace PackIt.Actions
 
         public override void ClearControl()
         {
-            control.Dispose();
+            if (control != null)
+                control.Dispose();
             control = null;
         }
     }

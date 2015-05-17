@@ -85,7 +85,8 @@ namespace PackIt
 
         public void ClearControl()
         {
-            control.Dispose();
+            if (control != null)
+                control.Dispose();
             control = null;
         }
 

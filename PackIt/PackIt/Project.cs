@@ -21,6 +21,19 @@ namespace PackIt
 
         public string FileName { get; set; }
 
+        public string ProjectFolderName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(FolderPath))
+                    return string.Empty;
+                // Is there a better way to get a string array from a char?
+                string[] folderArray = FolderPath.Split(new string[] { Path.DirectorySeparatorChar.ToString() },
+                    StringSplitOptions.RemoveEmptyEntries);
+                return folderArray[folderArray.Length - 1];
+            }
+        }
+
         private ProjectControl control;
 
         public Project()
@@ -34,9 +47,13 @@ namespace PackIt
 
         public void InitialiseProject(XmlDocument doc)
         {
+            XmlNode root = null;
             if (doc.ChildNodes.Count == 0)
                 throw new Exception("Invalid XML");
-            XmlNode root = doc.FirstChild;
+            if (doc.ChildNodes.Count == 1)
+                root = doc.FirstChild;
+            if (doc.ChildNodes.Count == 2)
+                root = doc.ChildNodes[1];
             if (root.Name != "pack")
                 throw new Exception("Invalid Root-Node");
             Document = doc;
@@ -55,11 +72,16 @@ namespace PackIt
 
         private void UpdateDocument()
         {
-            Document.FirstChild.RemoveAll();
+            XmlNode root = null;
+            if (Document.ChildNodes.Count == 1)
+                root = Document.FirstChild;
+            if (Document.ChildNodes.Count == 2)
+                root = Document.ChildNodes[1];
+            root.RemoveAll();
             foreach (Task task in Tasks)
             {
                 XmlNode tNode = Document.CreateElement("task");
-                Document.FirstChild.AppendChild(tNode);
+                root.AppendChild(tNode);
                 task.FillXml(tNode);
             }
         }
@@ -92,6 +114,14 @@ namespace PackIt
             if (control == null)
                 control = new ProjectControl(this);
             return control;
+        }
+
+
+        public void ClearControl()
+        {
+            if (control != null)
+                control.Dispose();
+            control = null;
         }
     }
 }
