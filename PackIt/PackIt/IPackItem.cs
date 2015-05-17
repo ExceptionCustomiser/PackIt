@@ -10,5 +10,7 @@ namespace PackIt
         : ISavable
     {
         Control GetConfigControl();
+
+        void ClearControl();
     }
 }

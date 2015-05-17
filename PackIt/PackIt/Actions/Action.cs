@@ -16,6 +16,8 @@ namespace PackIt
         /// <summary>The name of this Tag</summary>
         public string TagName { get; private set; }
 
+        public Task Task { get; set; }
+
         protected Action(string tagName)
         {
             TagName = tagName;
@@ -39,5 +41,12 @@ namespace PackIt
         public abstract void Save();
 
         public abstract Control GetConfigControl();
+
+        public abstract void ClearControl();
+
+        public override string ToString()
+        {
+            return Task.ToString() + " - " + this.TagName;
+        }
     }
 }

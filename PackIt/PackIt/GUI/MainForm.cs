@@ -15,7 +15,16 @@ namespace PackIt.GUI
     public partial class MainForm : Form
     {
 
-        public bool Dirty { get; private set; }
+        public bool Dirty
+        {
+            get
+            {
+                foreach (TabPage tp in workingTabControler.TabPages)
+                    if (tp is IDirty && (tp as IDirty).Dirty)
+                        return true;
+                return false;
+            }
+        }
 
         private bool _SomethingOpen;
 
@@ -39,9 +48,66 @@ namespace PackIt.GUI
             InitializeComponent();
             FillInitialInfos();
             SomethignOpen = false;
+            workingTabControler.DrawMode = TabDrawMode.OwnerDrawFixed;
+            workingTabControler.DrawItem += DrawItem;
+            workingTabControler.MouseDown += TabControlMouseDown;
         }
 
         #region EventHandling
+
+        #region workingTabControler
+
+        /// <summary>The draw event of the workingTabControler</summary>
+        public void DrawItem(object sender, DrawItemEventArgs e)
+        {
+            PackItTabPage packPage = workingTabControler.TabPages[e.Index] as PackItTabPage;
+            string text = packPage.Text;
+            if (packPage.Dirty)
+                if (workingTabControler.SelectedTab == packPage)
+                    e.Graphics.DrawString("*", e.Font, Brushes.Black, e.Bounds.Right - 25, e.Bounds.Top + 4);
+                else
+                    e.Graphics.DrawString("*", e.Font, Brushes.Black, e.Bounds.Right - 15, e.Bounds.Top + 4);
+            if (workingTabControler.SelectedTab == packPage)
+                e.Graphics.DrawString("X", e.Font, Brushes.Black, e.Bounds.Right - 15, e.Bounds.Top + 4);
+            e.Graphics.DrawString(text, e.Font, Brushes.Black, e.Bounds.Left, e.Bounds.Top + 4);
+            e.DrawFocusRectangle();
+        }
+
+        /// <summary>The MouseDown event of the workingTabControler</summary>
+        public void TabControlMouseDown(object sender, MouseEventArgs e)
+        {
+            for (int i = 0; i < this.workingTabControler.TabPages.Count; i++)
+            {
+                PackItTabPage page = workingTabControler.TabPages[i] as PackItTabPage;
+                Rectangle r = workingTabControler.GetTabRect(i);
+                if (e.Button == System.Windows.Forms.MouseButtons.Middle)
+                {
+                    if (!r.Contains(e.Location))
+                        continue;
+                }
+                else
+                {
+                    if (workingTabControler.SelectedTab != page)
+                        continue;
+                    //Getting the position of the "x" mark.
+                    Rectangle closeButton = new Rectangle(r.Right - 15, r.Top + 4, 9, 7);
+                    if (!closeButton.Contains(e.Location))
+                        continue;
+                }
+                if (page.Dirty)
+                {
+                    var result = MessageBox.Show("Would you like to save this Tab?", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                        page.PackItem.Save();
+                    else if (result == System.Windows.Forms.DialogResult.Cancel)
+                        break;
+                }
+                this.workingTabControler.TabPages.RemoveAt(i);
+                page.PackItem.ClearControl();
+            }
+        }
+
+        #endregion
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -98,7 +164,6 @@ namespace PackIt.GUI
         private void Save()
         {
             _CurrentProject.Save();
-            Dirty = false;
         }
 
         /// <summary>Opens an existing project.</summary>
@@ -106,7 +171,7 @@ namespace PackIt.GUI
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Multiselect = false;
-            ofd.Filter = "Pack Files|pack.xml|All Files|*.*";
+            ofd.Filter = "Pack Files|pack.xml";
             var result = ofd.ShowDialog();
             switch (result)
             {
@@ -119,17 +184,21 @@ namespace PackIt.GUI
             try
             {
                 XmlDocument doc = new XmlDocument();
-                doc.Load(ofd.OpenFile());
+                Stream s = ofd.OpenFile();
+                doc.Load(s);
                 _CurrentProject = new Project();
                 _CurrentProject.InitialiseProject(doc);
                 _CurrentProject.FolderPath = ofd.FileName.Replace(ofd.SafeFileName, "");
                 _CurrentProject.FileName = ofd.SafeFileName;
+                s.Close();
+                s.Dispose();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Unable to load file: " + ex.ToString());
                 return;
             }
+            workingTabControler.TabPages.Clear();
             FillProjectTree();
             SomethignOpen = true;
         }
@@ -155,6 +224,7 @@ namespace PackIt.GUI
             {
                 MessageBox.Show("Error while making new File: " + ex.ToString());
             }
+            workingTabControler.TabPages.Clear();
             FillProjectTree();
             SomethignOpen = true;
         }
@@ -164,7 +234,7 @@ namespace PackIt.GUI
             treeProject.BeginUpdate();
             treeProject.Nodes.Clear();
             // Für jeden Task
-            TreeNode root = new TreeNode("Pack");
+            TreeNode root = new TreeNode(_CurrentProject.ProjectFolderName);
             root.Tag = _CurrentProject;
             treeProject.Nodes.Add(root);
             foreach (Task task in _CurrentProject.Tasks)
@@ -186,46 +256,37 @@ namespace PackIt.GUI
 
         /// <summary>Opens a new tab.</summary>
         /// <param name="toOpen"></param>
-        private void OpenNewTask(Task toOpen)
+        internal void OpenNewTask(Task toOpen)
         {
-            TabPage tp = OpenOrChoose(toOpen);
-            tp.Text = toOpen.TaskName;
-            // TODO Load specific controls
+            OpenOrChoose(toOpen, toOpen.TaskName);
         }
 
-        private void OpenNewAction(Task parent, Action toOpen)
+        internal void OpenNewAction(Task parent, Action toOpen)
         {
-            TabPage tp = OpenOrChoose(toOpen);
-            tp.Text = parent.TaskName + " - " + toOpen.TagName;
-            // TODO Load specific controls
+            OpenOrChoose(toOpen, parent.TaskName + " - " + toOpen.TagName);
         }
 
-        private void OpenNewProject(Project project)
+        internal void OpenNewProject(Project project)
         {
-            TabPage tp = OpenOrChoose(project);
-            tp.Text = "Project";
-            // TODO Load specific controls
+            OpenOrChoose(project, project.ProjectFolderName);
         }
 
-        private TabPage OpenOrChoose(object tag)
+        private void OpenOrChoose(IPackItem tag, string name)
         {
-            foreach (TabPage tab in workingTabControler.TabPages)
+            foreach (TabPage tabPage in workingTabControler.TabPages)
             {
-                if (tab.Tag == tag)
+                PackItTabPage tab = tabPage as PackItTabPage;
+                if (tab.PackItem == tag)
                 {
                     workingTabControler.SelectedTab = tab;
-                    return tab;
+                    return;
                 }
             }
-            TabPage tp = new TabPage();
-            tp.Tag = tag;
-            Control configCont = (tag as IPackItem).GetConfigControl();
-            configCont.Anchor = (AnchorStyles.Top | AnchorStyles.Right
-                | AnchorStyles.Left | AnchorStyles.Bottom);
-            tp.Controls.Add(configCont);
+            PackItTabPage tp = new PackItTabPage();
+            tp.PackItem = tag;
+            tp.Text = name + "    ";
             this.workingTabControler.TabPages.Add(tp);
             workingTabControler.SelectedTab = tp;
-            return tp;
         }
 
         private bool CheckExitOnDirty()
@@ -258,8 +319,13 @@ namespace PackIt.GUI
             }
         }
 
-        #endregion
+        public override void Refresh()
+        {
+            FillProjectTree();
+            base.Refresh();
+        }
 
+        #endregion
 
     }
 }

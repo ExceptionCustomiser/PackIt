@@ -18,7 +18,6 @@ namespace PackIt.GUI
 
         public void Save()
         {
-            throw new NotImplementedException();
         }
     }
 }

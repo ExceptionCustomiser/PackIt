@@ -18,6 +18,8 @@ namespace PackIt
 
         private TaskControl control;
 
+        public Project Project { get; set; }
+
         public Task(string taskName)
             : this()
         {
@@ -59,6 +61,7 @@ namespace PackIt
                 if (child.NodeType != XmlNodeType.Element)
                     continue;
                 Action act = Action.GetTaskByString(child.Name);
+                act.Task = this;
                 act.FillFromXmlNode(child);
                 Actions.Add(act);
             }
@@ -78,6 +81,17 @@ namespace PackIt
             if (control == null)
                 control = new TaskControl(this);
             return control;
+        }
+
+        public void ClearControl()
+        {
+            control.Dispose();
+            control = null;
+        }
+
+        public override string ToString()
+        {
+            return TaskName;
         }
     }
 }

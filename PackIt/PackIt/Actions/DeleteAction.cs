@@ -47,5 +47,11 @@ namespace PackIt.Actions
             }
             return control;
         }
+
+        public override void ClearControl()
+        {
+            control.Dispose();
+            control = null;
+        }
     }
 }

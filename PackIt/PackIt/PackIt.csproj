@@ -50,6 +50,9 @@
     <Compile Include="Actions\DeleteAction.cs" />
     <Compile Include="Actions\ZipAction.cs" />
     <Compile Include="GUI\IDirty.cs" />
+    <Compile Include="GUI\PackItTabPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\UserControls\CopyControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -74,7 +77,6 @@
     <Compile Include="GUI\UserControls\ProjectControl.Designer.cs">
       <DependentUpon>ProjectControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\UserControls\TabPageUtil.cs" />
     <Compile Include="GUI\UserControls\TaskControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -98,18 +100,36 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\PowerShell.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PowerShell.resx</DependentUpon>
+    </Compile>
     <Compile Include="Task.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\UserControls\CopyControl.resx">
+      <DependentUpon>CopyControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\UserControls\ProjectControl.resx">
       <DependentUpon>ProjectControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\UserControls\TaskControl.resx">
+      <DependentUpon>TaskControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\UserControls\ZipControl.resx">
+      <DependentUpon>ZipControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PowerShell.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PowerShell.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

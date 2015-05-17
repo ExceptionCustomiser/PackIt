@@ -7,6 +7,6 @@ namespace PackIt.GUI
 {
     internal interface IDirty
     {
-        bool Dirty;
+        bool Dirty { get; set; }
     }
 }
