@@ -1,6 +1,8 @@
 ﻿using PackIt.GUI;
+using PackIt.Resources;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -69,7 +71,20 @@ namespace PackIt
             foreach (Task t in Tasks)
                 t.Save();
             UpdateDocument();
-            Document.Save(FolderPath + FileName);
+            StreamWriter outStream = File.CreateText(FolderPath + FileName);
+            Document.Save(outStream);
+            outStream.Close();
+            outStream.Dispose();
+            SavePowerShell();
+        }
+
+        private void SavePowerShell()
+        {
+            string script = PowerShell.script;
+            StreamWriter outStream = File.CreateText(FolderPath + "pack.ps1");
+            outStream.Write(script);
+            outStream.Close();
+            outStream.Dispose();
         }
 
         public System.Windows.Forms.Control GetConfigControl()
