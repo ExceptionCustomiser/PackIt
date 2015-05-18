@@ -1,15 +1,23 @@
 <pack>
-  <task id="1" name="Task 1 - Build">
+  <task id="0" name="Task 0 - build">
     <!-- TODO Build -->
   </task>
-  <task id="2" name="Task 2 - Copy">
-    <copy from="path/to/folder/or/file/" to="target/directiry"/>
-    <copy from="other/path/" to="target/directiry"/>
+  <task id="1" name="Task 1 - zip">
+    <zip from="tempFolder" to="alt.zip" />
   </task>
-  <task id="3" name="Task 3 - Zip">
-    <zip from="target/directiry/" to="target/target.zip"/>
+  <task id="2" name="Task 2 - rename">
+    <rename path="alt.zip" newName="new.zip" />
   </task>
-  <task id="4" name="Task 4 - Copy Zipfile">
-    <copy from="target/target.zip" to="deploymentpackage/"/>
+  <task id="3" name="Task 3 - create folder">
+    <createFolder folder="temp" />
+  </task>
+  <task id="4" name="Task 4 - copy">
+    <copy from="new.zip" to="temp/" />
+  </task>
+  <task id="5" name="Task 5 - delete">
+    <delete path="new.zip" />
+  </task>
+  <task id="6" name="Task 6 - move file">
+    <move from="temp/new.zip" to=".\"/>
   </task>
 </pack>
