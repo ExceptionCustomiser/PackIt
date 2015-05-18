@@ -24,4 +24,4 @@ Function zip($xmlAction) {
 	Write-Host "zip"
 }
 Project($xmlData.pack);
-TEST
+Read-Host
